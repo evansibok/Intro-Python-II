@@ -49,25 +49,45 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
-player = Player(
-    input("Please enter your name to begin: "), room["outside"])
+playerName = input("Please enter your name to begin: ")
 
-print("Welcome %s! You are currently in the %s room. %s" %
+player = Player(playerName, room["outside"])
+
+print("Welcome %s!\nYou are currently in the %s room. %s" %
       (player.name, player.current_room.name, player.current_room.description))
 
-print("Please pick a direction to move to!")
+direction = ("n", "s", "e", "w")
 
-direction = ""
+while True:
+    cmd = input(
+        "\nPick a direction to move!\n[n] north, [s] south, [e] east, [w] west, [q] quit ~: ")
+    try:
+        if cmd in direction:
+            if getattr(
+                    player.current_room, f"{cmd}_to") == None:
+                print("There's no room to move to!")
+            else:
+                player.current_room = getattr(
+                    player.current_room, f"{cmd}_to")
+                print(
+                    f"\nHello {player.name}, you are in {player.current_room.name}. {player.current_room.description}")
+        elif cmd == 'q':
+            print("Game Over!")
+            break
+        else:
+            print("Please enter a valid command!")
+    except ValueError:
+        print("This option is not available!")
 
-while direction != 'q':
-    direction = input(
-        "[n] north, [s] south, [e] east, [w] west, [q] quit ")
-    if direction == 'n':
-        player.current_room = player.current_room.n_to
-        print("{}, you are in the {} room. {}".format(
-            player.name, player.current_room.name, player.current_room.description))
-    elif direction == 'q':
-        print("Game exited!")
-        break
-    else:
-        print("Wrong move selected!")
+
+# 1. Player starts Outside and can only move North (Other Directions return error)
+# 2. Player moves North (from Outside) and enters Foyer
+# 3. Player can only move South, North, and East (Other directions returns error)
+# 4. Player moves South (from Foyer) and goes back to Outside
+# 5. PLayer moves North (from Foyer) and enters Overlook
+# 6. Player can only move South (from Overlook) and goes back to Foyer
+# 7. PLayer moves East (from Foyer) and enters Narrow
+# 8. Player can only move West and North (from Narrow) (Other directions return error)
+# 9. Player moves West (from Narrow) and goes back to Foyer
+# 10. Player moves North (from Narrow) and enters Treasure
+# 11. Player can only move South from Treasure back to Narrow
