@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -20,7 +21,6 @@ to north. The smell of gold permeates the air."""),
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
-
 
 # Link rooms together
 
@@ -49,3 +49,29 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+playerName = input("Please enter your name to begin: ")
+
+player = Player(playerName, room["outside"])
+
+print("Welcome %s!\nYou are currently in the %s room. %s" %
+      (player.name, player.current_room.name, player.current_room.description))
+
+direction = ("n", "s", "e", "w")
+
+while True:
+    cmd = input(
+        "\nPick a direction to move!\n[n] north, [s] south, [e] east, [w] west, [q] quit ~: ")
+    if cmd in direction:
+        if getattr(
+                player.current_room, f"{cmd}_to") == None:
+            print("There's no room to move to!")
+        else:
+            player.current_room = getattr(
+                player.current_room, f"{cmd}_to")
+            print(
+                f"\nHello {player.name}, you are in {player.current_room.name}. {player.current_room.description}")
+    elif cmd == 'q':
+        print("Game Over!")
+        break
+    else:
+        print("Please enter a valid command!")
