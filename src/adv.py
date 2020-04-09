@@ -61,33 +61,17 @@ direction = ("n", "s", "e", "w")
 while True:
     cmd = input(
         "\nPick a direction to move!\n[n] north, [s] south, [e] east, [w] west, [q] quit ~: ")
-    try:
-        if cmd in direction:
-            if getattr(
-                    player.current_room, f"{cmd}_to") == None:
-                print("There's no room to move to!")
-            else:
-                player.current_room = getattr(
-                    player.current_room, f"{cmd}_to")
-                print(
-                    f"\nHello {player.name}, you are in {player.current_room.name}. {player.current_room.description}")
-        elif cmd == 'q':
-            print("Game Over!")
-            break
+    if cmd in direction:
+        if getattr(
+                player.current_room, f"{cmd}_to") == None:
+            print("There's no room to move to!")
         else:
-            print("Please enter a valid command!")
-    except ValueError:
-        print("This option is not available!")
-
-
-# 1. Player starts Outside and can only move North (Other Directions return error)
-# 2. Player moves North (from Outside) and enters Foyer
-# 3. Player can only move South, North, and East (Other directions returns error)
-# 4. Player moves South (from Foyer) and goes back to Outside
-# 5. PLayer moves North (from Foyer) and enters Overlook
-# 6. Player can only move South (from Overlook) and goes back to Foyer
-# 7. PLayer moves East (from Foyer) and enters Narrow
-# 8. Player can only move West and North (from Narrow) (Other directions return error)
-# 9. Player moves West (from Narrow) and goes back to Foyer
-# 10. Player moves North (from Narrow) and enters Treasure
-# 11. Player can only move South from Treasure back to Narrow
+            player.current_room = getattr(
+                player.current_room, f"{cmd}_to")
+            print(
+                f"\nHello {player.name}, you are in {player.current_room.name}. {player.current_room.description}")
+    elif cmd == 'q':
+        print("Game Over!")
+        break
+    else:
+        print("Please enter a valid command!")
